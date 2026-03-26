@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#020406;--void:#050b10;
+  --cyan:#00e5ff;--cyan-dim:rgba(0,229,255,0.08);--cyan-line:rgba(0,229,255,0.15);
+  --silver:#8fa3b1;--white:#e8f0f4;--white-dim:rgba(232,240,244,0.55);
+  --red:#ff2d55;--amber:#ffb830;--green:#00e87a;
+}
+html,body{background:var(--black);color:var(--white);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.018) 1px,transparent 1px);background-size:60px 60px;z-index:0;pointer-events:none}
+
+.section{position:relative;z-index:10;padding:120px 60px}
+
+/* TAG */
+.section-tag{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;color:var(--cyan);text-transform:uppercase;margin-bottom:28px;display:flex;align-items:center;gap:14px;opacity:0;animation:fadeUp .7s ease .1s both}
+.section-tag::before{content:'';width:40px;height:1px;background:var(--cyan)}
+
+/* HEADLINE */
+.section-headline{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(38px,5.5vw,76px);line-height:1.0;letter-spacing:-1px;color:var(--white);max-width:880px;margin-bottom:20px;opacity:0;animation:fadeUp .7s ease .25s both}
+.section-headline em{font-style:normal;color:var(--cyan)}
+.section-sub{font-size:18px;line-height:1.65;color:var(--white-dim);max-width:640px;margin-bottom:80px;font-weight:400;opacity:0;animation:fadeUp .7s ease .4s both}
+.section-sub strong{color:var(--white);font-weight:600}
+
+/* NOT AN AGENCY — REFRAME ROW */
+.reframe-section{margin-bottom:80px;opacity:0;animation:fadeUp .8s ease .5s both}
+.reframe-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--silver);text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(0,229,255,0.08)}
+.reframe-grid{display:grid;grid-template-columns:1fr 40px 1fr;gap:0}
+.reframe-col-old{padding:0 0 0 0}
+.reframe-col-new{padding:0 0 0 0}
+.reframe-arrow-col{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;padding-top:44px}
+.reframe-item{padding:20px 24px;margin-bottom:2px;position:relative}
+.reframe-item-old{background:rgba(143,163,177,0.04);border:1px solid rgba(143,163,177,0.08)}
+.reframe-item-new{background:var(--cyan-dim);border:1px solid var(--cyan-line);position:relative;overflow:hidden}
+.reframe-item-new::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--cyan)}
+.reframe-item-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.label-old{color:rgba(143,163,177,0.4);text-decoration:line-through}
+.label-new{color:rgba(0,229,255,0.5)}
+.reframe-item-text{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;line-height:1.4}
+.text-old{color:rgba(232,240,244,0.3)}
+.text-new{color:var(--white)}
+.arrow-divider{font-family:'Space Mono',monospace;font-size:14px;color:rgba(0,229,255,0.25);writing-mode:vertical-rl;letter-spacing:8px;padding:10px 0}
+
+/* CORE IDENTITY BLOCK */
+.identity-block{border:1px solid var(--cyan-line);padding:60px;position:relative;margin-bottom:80px;opacity:0;animation:fadeUp .8s ease .65s both;overflow:hidden}
+.identity-block::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+.identity-block::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,229,255,0.3),transparent)}
+.identity-corner{position:absolute;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(0,229,255,0.3);text-transform:uppercase}
+.identity-corner.tl{top:16px;left:20px}
+.identity-corner.tr{top:16px;right:20px}
+.identity-corner.bl{bottom:16px;left:20px}
+.identity-corner.br{bottom:16px;right:20px}
+.identity-tagline{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:4px;color:rgba(0,229,255,0.5);text-transform:uppercase;margin-bottom:24px;text-align:center}
+.identity-headline{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,4vw,52px);color:var(--white);text-align:center;line-height:1.1;margin-bottom:20px}
+.identity-headline em{font-style:normal;color:var(--cyan)}
+.identity-body{font-size:17px;line-height:1.7;color:var(--white-dim);text-align:center;max-width:700px;margin:0 auto 40px}
+.identity-body strong{color:var(--white)}
+.identity-doctrine{font-family:'Space Mono',monospace;font-size:14px;letter-spacing:3px;color:var(--cyan);text-align:center;text-transform:uppercase;border-top:1px solid rgba(0,229,255,0.1);padding-top:28px;margin-top:8px}
+
+/* COMPARISON DESTROYER */
+.compare-section{margin-bottom:80px;opacity:0;animation:fadeUp .8s ease .8s both}
+.compare-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--silver);text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(0,229,255,0.08)}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px}
+.compare-card{padding:28px;background:rgba(5,11,16,0.8);border:1px solid rgba(0,229,255,0.06);position:relative;overflow:hidden;transition:border-color .3s}
+.compare-card:hover{border-color:rgba(0,229,255,0.2)}
+.compare-card.kryonix{background:var(--cyan-dim);border-color:var(--cyan-line)}
+.compare-card.kryonix::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--cyan)}
+.compare-card-tag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(0,229,255,0.08)}
+.tag-theirs{color:rgba(143,163,177,0.4)}
+.tag-kryonix{color:var(--cyan)}
+.compare-card-title{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--white);margin-bottom:16px;line-height:1.2}
+.compare-card.others .compare-card-title{color:rgba(232,240,244,0.3)}
+.compare-item{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start}
+.compare-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.dot-no{background:rgba(143,163,177,0.25)}
+.dot-yes{background:var(--cyan)}
+.compare-text{font-size:14px;line-height:1.5;color:var(--silver)}
+.compare-text.strong{color:var(--white);font-weight:500}
+.compare-card.others .compare-text{color:rgba(143,163,177,0.4)}
+
+/* THE FIVE DOCTRINES */
+.doctrine-section{margin-bottom:80px;opacity:0;animation:fadeUp .8s ease .95s both}
+.doctrine-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;color:var(--silver);text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(0,229,255,0.08)}
+.doctrine-items{display:flex;flex-direction:column;gap:2px}
+.doctrine-item{display:grid;grid-template-columns:60px 240px 1fr 120px;align-items:stretch;gap:0;cursor:pointer;transition:all .2s}
+.doctrine-item:hover .di-num{background:rgba(0,229,255,0.1)}
+.doctrine-item:hover .di-name{border-color:rgba(0,229,255,0.2)}
+.doctrine-item:hover .di-body{border-color:rgba(0,229,255,0.2)}
+.di-num{background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.08);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;color:rgba(0,229,255,0.4);transition:background .2s}
+.di-name{background:rgba(5,11,16,0.8);border:1px solid rgba(0,229,255,0.08);border-left:none;padding:18px 22px;display:flex;flex-direction:column;justify-content:center}
+.di-name-text{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--white);margin-bottom:3px}
+.di-name-sub{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(0,229,255,0.4);text-transform:uppercase}
+.di-body{background:rgba(5,11,16,0.6);border:1px solid rgba(0,229,255,0.08);border-left:none;padding:18px 22px;display:flex;align-items:center}
+.di-body-text{font-size:14px;line-height:1.6;color:var(--silver)}
+.di-body-text strong{color:var(--white)}
+.di-badge{background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.12);border-left:none;padding:18px;display:flex;align-items:center;justify-content:center}
+.di-badge-text{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(0,229,255,0.6);text-transform:uppercase;text-align:center;line-height:1.8}
+
+/* SOVEREIGNTY STATEMENT */
+.sovereignty-block{padding:80px 60px;text-align:center;position:relative;margin-bottom:0;opacity:0;animation:fadeUp .8s ease 1.1s both;border-top:1px solid rgba(0,229,255,0.08)}
+.sovereignty-block::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:200px;height:1px;background:var(--cyan)}
+.sov-pre{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:4px;color:rgba(0,229,255,0.4);text-transform:uppercase;margin-bottom:28px}
+.sov-quote{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(20px,3vw,36px);color:var(--white);line-height:1.3;max-width:800px;margin:0 auto 24px}
+.sov-quote em{font-style:normal;color:var(--cyan)}
+.sov-attribution{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(0,229,255,0.35);text-transform:uppercase}
+.cta-row{margin-top:48px;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap}
+.cta-primary{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:18px 36px;background:var(--cyan);color:var(--black);font-weight:700;border:none;cursor:pointer;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all .2s}
+.cta-primary:hover{transform:translateY(-2px)}
+.cta-secondary{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--silver);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:8px;transition:color .2s}
+.cta-secondary:hover{color:var(--white)}
+
+/* GLITCH WORD EFFECT */
+.glitch-wrap{position:relative;display:inline-block}
+.glitch-word{position:relative}
+.glitch-word::before,.glitch-word::after{content:attr(data-text);position:absolute;top:0;left:0;opacity:0}
+.glitch-word:hover::before{opacity:0.7;color:var(--red);animation:glitchA .3s steps(2,end) both}
+.glitch-word:hover::after{opacity:0.7;color:var(--cyan);animation:glitchB .3s steps(2,end) both}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glitchA{0%{clip-path:inset(0 0 80% 0);transform:translate(-2px,0)}50%{clip-path:inset(40% 0 30% 0);transform:translate(2px,0)}100%{clip-path:inset(70% 0 0 0);transform:translate(0,0)}}
+@keyframes glitchB{0%{clip-path:inset(60% 0 0 0);transform:translate(2px,0)}50%{clip-path:inset(20% 0 60% 0);transform:translate(-2px,0)}100%{clip-path:inset(0 0 80% 0);transform:translate(0,0)}}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 6px var(--cyan)}50%{opacity:0.4;box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="section">
+
+  <!-- TAG -->
+  <div class="section-tag">Category Architecture</div>
+
+  <!-- HEADLINE -->
+  <h2 class="section-headline">
+    This Is Not<br>
+    An <em>Automation Agency.</em><br>
+    That Category No Longer Applies.
+  </h2>
+  <p class="section-sub">
+    Automation agencies install tools and leave. They hand you a Zap and call it a system.
+    Kryonix operates at an entirely different layer of the stack — one that <strong>most businesses don't know exists</strong>
+    and competitors cannot locate, let alone replicate.
+  </p>
+
+  <!-- REFRAME GRID -->
+  <div class="reframe-section">
+    <div class="reframe-label">// The reframe — what others do vs. what Kryonix engineers</div>
+    <div class="reframe-grid">
+      <div class="reframe-col-old">
+        <div class="reframe-item reframe-item-old">
+          <div class="reframe-item-label label-old">Legacy Model</div>
+          <div class="reframe-item-text text-old">Install tools on top of broken operations</div>
+        </div>
+        <div class="reframe-item reframe-item-old">
+          <div class="reframe-item-label label-old">Legacy Model</div>
+          <div class="reframe-item-text text-old">Optimize workflows that still need humans</div>
+        </div>
+        <div class="reframe-item reframe-item-old">
+          <div class="reframe-item-label label-old">Legacy Model</div>
+          <div class="reframe-item-text text-old">Chase marginal efficiency gains</div>
+        </div>
+        <div class="reframe-item reframe-item-old">
+          <div class="reframe-item-label label-old">Legacy Model</div>
+          <div class="reframe-item-text text-old">Build businesses that require effort to scale</div>
+        </div>
+        <div class="reframe-item reframe-item-old">
+          <div class="reframe-item-label label-old">Legacy Model</div>
+          <div class="reframe-item-text text-old">Deliver automations. Measure task completion.</div>
+        </div>
+      </div>
+      <div class="reframe-arrow-col">
+        <div class="arrow-divider">→ → → → →</div>
+      </div>
+      <div class="reframe-col-new">
+        <div class="reframe-item reframe-item-new">
+          <div class="reframe-item-label label-new">Kryonix Doctrine</div>
+          <div class="reframe-item-text text-new">Engineer autonomous revenue cognition systems from the architecture layer up</div>
+        </div>
+        <div class="reframe-item reframe-item-new">
+          <div class="reframe-item-label label-new">Kryonix Doctrine</div>
+          <div class="reframe-item-text text-new">Build self-correcting, adversarially-resilient execution architectures</div>
+        </div>
+        <div class="reframe-item reframe-item-new">
+          <div class="reframe-item-label label-new">Kryonix Doctrine</div>
+          <div class="reframe-item-text text-new">Enforce structural market asymmetry — not margins, monopolies</div>
+        </div>
+        <div class="reframe-item reframe-item-new">
+          <div class="reframe-item-label label-new">Kryonix Doctrine</div>
+          <div class="reframe-item-text text-new">Install systems where scale is the default state — not the destination</div>
+        </div>
+        <div class="reframe-item reframe-item-new">
+          <div class="reframe-item-label label-new">Kryonix Doctrine</div>
+          <div class="reframe-item-text text-new">Redefine the underlying mechanics of how a business operates</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORE IDENTITY BLOCK -->
+  <div class="identity-block">
+    <div class="identity-corner tl">KRYONIX / SYSTEM CLASS</div>
+    <div class="identity-corner tr">CATEGORY: UNDEFINED</div>
+    <div class="identity-corner bl">ACCESS: CONTROLLED</div>
+    <div class="identity-corner br">LAYER: POST-OPERATIONAL</div>
+    <div class="identity-tagline">What Kryonix Actually Is</div>
+    <div class="identity-headline">
+      A <em>Post-Operational</em><br>Intelligence Layer
+    </div>
+    <p class="identity-body">
+      Kryonix is a <strong>synthetic orchestration fabric</strong> — overlaid onto any business environment,
+      it rewrites the behavioral, computational, and revenue-generating logic at the systems level.
+      Where others install tools, Kryonix engineers <strong>closed-loop, self-optimizing economic organisms</strong>.
+      The business does not get better. Its underlying mechanics get replaced.
+    </p>
+    <div class="identity-doctrine">Forget Margins. Think Monopolies.</div>
+  </div>
+
+  <!-- COMPARISON DESTROYER -->
+  <div class="compare-section">
+    <div class="compare-label">// The taxonomy collapse — why comparison is structurally impossible</div>
+    <div class="compare-grid">
+      <div class="compare-card others">
+        <div class="compare-card-tag tag-theirs">Category: Traditional Agency</div>
+        <div class="compare-card-title">Tool Installers</div>
+        <div class="compare-item"><div class="compare-dot dot-no"></div><div class="compare-text">Deliver pre-built automation templates</div></div>
+        <div class="compare-item"><div class="compare-dot dot-no"></div><div class="compare-text">Human-dependent at every critical node</div></div>
+        <div class="compare-item"><div class="compare-dot dot-no"></div><div class="compare-text">React to problems after they occur</div></div>
+        <div class="compare-item"><div class="compare-dot dot-no"></div><div class="compare-text">Scale requires hiring more people</div></div>
+        <div class="compare-item"><div class="compare-dot dot-no"></div><div class="compare-text">Static systems that decay without maintenance</div></div>
+      </div>
+      <div class="compare-card others">
+        <div class="compare-card-tag tag-theirs">Category: SaaS / Software</div>
+        <div class="compare-card-title">Platform Vendors</div>
+        <div class="compare-item"><div class="compare-dot dot-no"></div><div class="compare-text">Sell seats. Charge per user.</div></div>
+        <div class="compare-item"><div class="compare-dot dot-no"></div><div class="compare-text">Require internal expertise to operate</div></div>
+        <div class="compare-item"><div class="compare-dot dot-no"></div><div class="compare-text">One-size solution across all verticals</div></div>
+        <div class="compare-item"><div class="compare-dot dot-no"></div><div class="compare-text">Integration is your problem</div></div>
+        <div class="compare-item"><div class="compare-dot dot-no"></div><div class="compare-text">Optimize process. Never replace it.</div></div>
+      </div>
+      <div class="compare-card kryonix">
+        <div class="compare-card-tag tag-kryonix">Category: None — Architect Class</div>
+        <div class="compare-card-title">Kryonix</div>
+        <div class="compare-item"><div class="compare-dot dot-yes"></div><div class="compare-text strong">Engineers bespoke cognitive infrastructure per client</div></div>
+        <div class="compare-item"><div class="compare-dot dot-yes"></div><div class="compare-text strong">Machine-operated systems. Humans supervise.</div></div>
+        <div class="compare-item"><div class="compare-dot dot-yes"></div><div class="compare-text strong">Predictive — acts before intent is fully formed</div></div>
+        <div class="compare-item"><div class="compare-dot dot-yes"></div><div class="compare-text strong">Scale is structural. Not additive.</div></div>
+        <div class="compare-item"><div class="compare-dot dot-yes"></div><div class="compare-text strong">Self-evolving feedback loop. The system improves itself.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIVE DOCTRINES -->
+  <div class="doctrine-section">
+    <div class="doctrine-label">// The five control variables Kryonix targets — upstream of everything you track</div>
+    <div class="doctrine-items">
+      <div class="doctrine-item">
+        <div class="di-num">01</div>
+        <div class="di-name">
+          <div class="di-name-text">Attention Flow</div>
+          <div class="di-name-sub">Capture architecture</div>
+        </div>
+        <div class="di-body">
+          <div class="di-body-text">Control when, how, and in what sequence your prospect's attention is directed. <strong>Attention precedes intent.</strong> Most businesses arrive too late — after the decision has already been shaped by someone else's system.</div>
+        </div>
+        <div class="di-badge"><div class="di-badge-text">UPSTREAM<br>VARIABLE</div></div>
+      </div>
+      <div class="doctrine-item">
+        <div class="di-num">02</div>
+        <div class="di-name">
+          <div class="di-name-text">Response Latency</div>
+          <div class="di-name-sub">Execution velocity</div>
+        </div>
+        <div class="di-body">
+          <div class="di-body-text"><strong>The business that responds first does not compete — it absorbs.</strong> Kryonix eliminates the human latency layer entirely. Signal arrives. Action executes. Sub-second. Without exception.</div>
+        </div>
+        <div class="di-badge"><div class="di-badge-text">EXECUTION<br>LAYER</div></div>
+      </div>
+      <div class="doctrine-item">
+        <div class="di-num">03</div>
+        <div class="di-name">
+          <div class="di-name-text">Decision Automation</div>
+          <div class="di-name-sub">Compression engine</div>
+        </div>
+        <div class="di-body">
+          <div class="di-body-text">Complex human decision trees collapsed into <strong>deterministic logic flows</strong>. No hesitation. No inconsistency. No fatigue. Every decision that doesn't require human creativity gets removed from the human queue permanently.</div>
+        </div>
+        <div class="di-badge"><div class="di-badge-text">COGNITIVE<br>LAYER</div></div>
+      </div>
+      <div class="doctrine-item">
+        <div class="di-num">04</div>
+        <div class="di-name">
+          <div class="di-name-text">Behavioral Capture</div>
+          <div class="di-name-sub">Loop architecture</div>
+        </div>
+        <div class="di-body">
+          <div class="di-body-text">Systems that engage, qualify, nurture, and convert <strong>without human initiation</strong>. Every behavioral signal — open, click, delay, revisit — triggers a calibrated response. The prospect never escapes the loop.</div>
+        </div>
+        <div class="di-badge"><div class="di-badge-text">BEHAVIORAL<br>LAYER</div></div>
+      </div>
+      <div class="doctrine-item">
+        <div class="di-num">05</div>
+        <div class="di-name">
+          <div class="di-name-text">Feedback Compounding</div>
+          <div class="di-name-sub">Self-evolution cycle</div>
+        </div>
+        <div class="di-body">
+          <div class="di-body-text">The system doesn't just run — it <strong>re-trains on its own outcomes</strong>. Every conversion, every loss, every behavioral pattern is fed back into the architecture. The longer it runs, the wider the asymmetry grows.</div>
+        </div>
+        <div class="di-badge"><div class="di-badge-text">COMPOUND<br>LAYER</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SOVEREIGNTY CLOSE -->
+  <div class="sovereignty-block">
+    <div class="sov-pre">// The positioning reality</div>
+    <div class="sov-quote">
+      If traditional companies are <em>human-operated systems supported by tools</em>,<br>
+      Kryonix-built companies are <em>machine-operated systems supervised by humans.</em>
+    </div>
+    <div class="sov-attribution">— Kryonix System Architecture Doctrine</div>
+    <div class="cta-row">
+      <button class="cta-primary">ENTER ARCHITECTURE LAYER</button>
+      <button class="cta-secondary">See the five-layer stack →</button>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

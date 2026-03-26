@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRYONIX — Hero Section</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;400;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #020406;
+    --void: #050b10;
+    --cyan: #00e5ff;
+    --cyan-dim: rgba(0,229,255,0.15);
+    --cyan-glow: rgba(0,229,255,0.06);
+    --silver: #8fa3b1;
+    --white: #e8f0f4;
+    --white-dim: rgba(232,240,244,0.55);
+    --red: #ff2d55;
+  }
+
+  html, body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* === GRID NOISE BACKGROUND === */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(0,229,255,0.04) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* === NAV === */
+  nav {
+    position: relative;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 60px;
+    border-bottom: 1px solid rgba(0,229,255,0.08);
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: 6px;
+    color: var(--white);
+    text-transform: uppercase;
+  }
+
+  .logo span { color: var(--cyan); }
+
+  .nav-tags {
+    display: flex;
+    gap: 40px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--silver);
+    text-transform: uppercase;
+  }
+
+  .nav-tag { cursor: pointer; transition: color 0.2s; }
+  .nav-tag:hover { color: var(--cyan); }
+
+  .nav-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--silver);
+    text-transform: uppercase;
+  }
+
+  .pulse-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  /* === HERO MAIN === */
+  .hero {
+    position: relative;
+    z-index: 10;
+    min-height: calc(100vh - 81px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 60px;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .hero-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.3s both;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--cyan);
+  }
+
+  /* === HEADLINE VARIANTS (TABS) === */
+  .headline-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.45s both;
+  }
+
+  .tab-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid rgba(0,229,255,0.2);
+    background: transparent;
+    color: var(--silver);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .tab-btn.active {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    background: rgba(0,229,255,0.06);
+  }
+
+  .tab-btn:hover:not(.active) {
+    border-color: rgba(0,229,255,0.4);
+    color: var(--white);
+  }
+
+  /* === HEADLINE DISPLAY === */
+  .headline-wrapper {
+    position: relative;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.6s both;
+  }
+
+  .headline {
+    display: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(44px, 6vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -1px;
+    color: var(--white);
+    max-width: 900px;
+  }
+
+  .headline.active { display: block; }
+
+  .headline em {
+    font-style: normal;
+    color: var(--cyan);
+    position: relative;
+  }
+
+  .headline em::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--cyan);
+    opacity: 0.4;
+  }
+
+  .headline .strike {
+    text-decoration: line-through;
+    color: rgba(232,240,244,0.2);
+  }
+
+  .headline .red { color: var(--red); }
+
+  /* === SUBTEXT VARIANTS === */
+  .subtext-wrapper {
+    max-width: 680px;
+    margin-bottom: 52px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.75s both;
+  }
+
+  .subtext {
+    display: none;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: var(--white-dim);
+    letter-spacing: 0.3px;
+  }
+
+  .subtext.active { display: block; }
+  .subtext strong { color: var(--white); font-weight: 600; }
+  .subtext .mono {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--cyan);
+    background: rgba(0,229,255,0.07);
+    padding: 1px 6px;
+    border: 1px solid rgba(0,229,255,0.15);
+  }
+
+  /* === CTA SECTION === */
+  .cta-section {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.9s both;
+  }
+
+  .cta-primary {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 18px 36px;
+    background: var(--cyan);
+    color: var(--black);
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  .cta-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+
+  .cta-primary:hover::before { transform: translateX(0); }
+  .cta-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(0,229,255,0.4); }
+
+  .cta-secondary {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--silver);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+  }
+
+  .cta-secondary::after {
+    content: '→';
+    color: var(--cyan);
+    transition: transform 0.2s;
+  }
+
+  .cta-secondary:hover { color: var(--white); }
+  .cta-secondary:hover::after { transform: translateX(4px); }
+
+  .cta-friction {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(143,163,177,0.5);
+    text-transform: uppercase;
+    margin-top: 16px;
+    padding-left: 2px;
+    width: 100%;
+  }
+
+  /* === RIGHT SIDE PANEL === */
+  .hero-layout {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .system-panel {
+    position: relative;
+    opacity: 0;
+    animation: fadeLeft 0.9s ease 1.0s both;
+  }
+
+  .panel-frame {
+    border: 1px solid rgba(0,229,255,0.12);
+    background: rgba(5,11,16,0.8);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel-frame::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  }
+
+  .panel-header {
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(0,229,255,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .panel-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    text-transform: uppercase;
+  }
+
+  .panel-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .panel-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: rgba(0,229,255,0.2);
+  }
+  .panel-dot:first-child { background: var(--red); opacity: 0.7; }
+  .panel-dot:nth-child(2) { background: #ffcc00; opacity: 0.7; }
+  .panel-dot:last-child { background: #00ff88; opacity: 0.7; }
+
+  .panel-body { padding: 20px 18px; }
+
+  .metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,229,255,0.05);
+  }
+
+  .metric-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--silver);
+    text-transform: uppercase;
+  }
+
+  .metric-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--cyan);
+  }
+
+  .metric-value.red { color: var(--red); }
+  .metric-value.white { color: var(--white); }
+
+  .bar-row { padding: 12px 0; }
+
+  .bar-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--silver);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .bar-track {
+    height: 3px;
+    background: rgba(0,229,255,0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--cyan);
+    position: relative;
+    animation: barGrow 1.5s ease 1.5s both;
+    transform-origin: left;
+  }
+
+  .bar-fill.red { background: var(--red); }
+  .bar-fill.green { background: #00ff88; }
+
+  .bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 20px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+  }
+
+  .log-section {
+    padding: 14px 0 4px;
+  }
+
+  .log-line {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: rgba(143,163,177,0.5);
+    margin-bottom: 7px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .log-line .ts { color: rgba(0,229,255,0.4); }
+  .log-line.active-log { color: rgba(232,240,244,0.7); }
+  .log-line .ok { color: #00ff88; }
+  .log-line .warn { color: #ffcc00; }
+  .log-line .err { color: var(--red); }
+
+  .scanning-line {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.4;
+    animation: scanDown 3s linear infinite;
+  }
+
+  /* === BOTTOM METRICS BAR === */
+  .bottom-bar {
+    position: relative;
+    z-index: 10;
+    border-top: 1px solid rgba(0,229,255,0.06);
+    display: flex;
+    gap: 0;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 1.2s both;
+  }
+
+  .bottom-metric {
+    flex: 1;
+    padding: 24px 60px;
+    border-right: 1px solid rgba(0,229,255,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .bottom-metric:last-child { border-right: none; }
+
+  .bm-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    color: var(--white);
+    letter-spacing: -1px;
+  }
+
+  .bm-num span { color: var(--cyan); }
+
+  .bm-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--silver);
+    text-transform: uppercase;
+  }
+
+  /* === VARIANT LABEL === */
+  .variant-label {
+    position: absolute;
+    top: -28px;
+    left: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: rgba(0,229,255,0.4);
+    text-transform: uppercase;
+  }
+
+  /* === ANIMATIONS === */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeLeft {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--cyan); }
+    50% { opacity: 0.4; box-shadow: none; }
+  }
+
+  @keyframes barGrow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  @keyframes scanDown {
+    from { top: 0; }
+    to { top: 100%; }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .cursor { animation: blink 1s step-end infinite; }
+
+  /* === VARIANT ANNOTATIONS === */
+  .annotation-box {
+    margin-top: 60px;
+    padding: 32px 60px;
+    border-top: 1px solid rgba(0,229,255,0.06);
+    position: relative;
+    z-index: 10;
+  }
+
+  .annotation-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .variants-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .variant-card {
+    padding: 20px;
+    border: 1px solid rgba(0,229,255,0.08);
+    background: rgba(5,11,16,0.6);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .variant-card.active-card {
+    border-color: var(--cyan);
+    background: rgba(0,229,255,0.04);
+  }
+
+  .variant-card:hover:not(.active-card) {
+    border-color: rgba(0,229,255,0.25);
+  }
+
+  .vc-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: rgba(0,229,255,0.5);
+    margin-bottom: 10px;
+  }
+
+  .vc-headline {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.4;
+    margin-bottom: 8px;
+  }
+
+  .vc-angle {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--silver);
+    line-height: 1.6;
+  }
+
+  .vc-trigger {
+    margin-top: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: rgba(0,229,255,0.6);
+    border-top: 1px solid rgba(0,229,255,0.08);
+    padding-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">KRY<span>O</span>NIX</div>
+  <div class="nav-tags">
+    <span class="nav-tag">Systems</span>
+    <span class="nav-tag">Architecture</span>
+    <span class="nav-tag">Intelligence</span>
+  </div>
+  <div class="nav-status">
+    <div class="pulse-dot"></div>
+    SYSTEMS OPERATIONAL
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-layout">
+    <!-- LEFT: COPY -->
+    <div class="hero-left">
+      <div class="hero-tag">Cognitive Automation Infrastructure</div>
+
+      <!-- HEADLINE VARIANT TABS -->
+      <div class="headline-tabs">
+        <button class="tab-btn active" onclick="switchVariant(0)">V1 — INTELLIGENCE GAP</button>
+        <button class="tab-btn" onclick="switchVariant(1)">V2 — OPERATIONAL FEAR</button>
+        <button class="tab-btn" onclick="switchVariant(2)">V3 — IDENTITY SHIFT</button>
+      </div>
+
+      <!-- HEADLINES -->
+      <div class="headline-wrapper">
+        <div class="variant-label" id="variantLabel">Angle: Asymmetric Intelligence</div>
+
+        <h1 class="headline active" id="h0">
+          Your Competitors<br>
+          Are Running<br>
+          <em>Closed-Loop Systems.</em><br>
+          <span class="strike">You're Running People.</span>
+        </h1>
+
+        <h1 class="headline" id="h1">
+          Every Hour<br>
+          Your Business<br>
+          Operates Without <em>This</em>,<br>
+          <span class="red">Revenue Decays.</span>
+        </h1>
+
+        <h1 class="headline" id="h2">
+          You Don't Need<br>
+          More Effort.<br>
+          You Need an<br>
+          <em>Execution Architecture.</em>
+        </h1>
+      </div>
+
+      <!-- SUBTEXTS -->
+      <div class="subtext-wrapper">
+        <p class="subtext active" id="s0">
+          Most businesses are human-dependent at every critical junction — <strong>lead response, qualification, follow-up, conversion</strong>. Each handoff is a latency event. Latency is revenue loss. Kryonix installs <span class="mono">cognitive automation layers</span> that eliminate the gap between signal and action. Permanently.
+        </p>
+        <p class="subtext" id="s1">
+          The average business loses <strong>71% of inbound leads</strong> to response delay alone. That's not a sales problem — it's a <span class="mono">structural failure</span> operating silently in the background of every quarter. We don't optimize your process. We replace the architecture it runs on.
+        </p>
+        <p class="subtext" id="s2">
+          Operators who scale past eight figures don't work harder at the ground level — they <strong>install systems that execute with or without them</strong>. The <span class="mono">Execution Compression Engine</span> is not a tool. It is an operational identity shift that makes your business structurally unfair to compete against.
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-section">
+        <button class="cta-primary" id="ctaBtn">ACCESS SYSTEM AUDIT</button>
+        <button class="cta-secondary">See Architecture Layers</button>
+        <div class="cta-friction" id="ctaFriction">
+          // AUDIT SESSIONS LIMITED — QUALIFIED OPERATORS ONLY
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: SYSTEM PANEL -->
+    <div class="system-panel">
+      <div class="panel-frame">
+        <div class="scanning-line"></div>
+        <div class="panel-header">
+          <div class="panel-title">SYSTEM DIAGNOSTIC — LIVE</div>
+          <div class="panel-dots">
+            <div class="panel-dot"></div>
+            <div class="panel-dot"></div>
+            <div class="panel-dot"></div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="metric-row">
+            <span class="metric-label">Lead Capture Latency</span>
+            <span class="metric-value red">+847ms AVG</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Execution Coverage</span>
+            <span class="metric-value white">23%</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Human Dependency Index</span>
+            <span class="metric-value red">CRITICAL</span>
+          </div>
+          <div class="metric-row">
+            <span class="metric-label">Signal → Action Gap</span>
+            <span class="metric-value red">4.2hrs</span>
+          </div>
+
+          <div class="bar-row">
+            <div class="bar-label">
+              <span>AUTOMATION DEPTH</span>
+              <span style="color:var(--red)">14%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill red" style="width:14%"></div></div>
+          </div>
+
+          <div class="bar-row">
+            <div class="bar-label">
+              <span>COGNITIVE LOAD OFFLOADED</span>
+              <span style="color:var(--cyan)">0%</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="width:2%"></div></div>
+          </div>
+
+          <div class="bar-row" style="border-bottom: 1px solid rgba(0,229,255,0.08); padding-bottom: 14px;">
+            <div class="bar-label">
+              <span>REVENUE RECOVERY POTENTIAL</span>
+              <span style="color:#00ff88">HIGH</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill green" style="width:78%"></div></div>
+          </div>
+
+          <div class="log-section">
+            <div class="log-line active-log">
+              <span class="ts">09:14:02</span>
+              <span class="warn">WARN</span>
+              <span>3 leads untracked — last 6hrs</span>
+            </div>
+            <div class="log-line active-log">
+              <span class="ts">09:13:47</span>
+              <span class="err">ERR</span>
+              <span>Follow-up sequence: timeout</span>
+            </div>
+            <div class="log-line">
+              <span class="ts">09:13:11</span>
+              <span class="ok">OK</span>
+              <span>Signal acquisition layer — standby</span>
+            </div>
+            <div class="log-line">
+              <span class="ts">09:12:55</span>
+              <span class="warn">WARN</span>
+              <span>Decision node: human bottleneck</span>
+            </div>
+            <div class="log-line">
+              <span class="ts">09:12:44</span>
+              <span class="ok">OK</span>
+              <span>Kryonix system: awaiting install<span class="cursor">_</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM METRICS BAR -->
+<div class="bottom-bar">
+  <div class="bottom-metric">
+    <div class="bm-num">94<span>%</span></div>
+    <div class="bm-label">Lead Response Rate Post-Install</div>
+  </div>
+  <div class="bottom-metric">
+    <div class="bm-num">0<span>ms</span></div>
+    <div class="bm-label">Decision Latency at Signal Layer</div>
+  </div>
+  <div class="bottom-metric">
+    <div class="bm-num">∞<span>×</span></div>
+    <div class="bm-label">Execution Capacity vs. Human Ops</div>
+  </div>
+  <div class="bottom-metric">
+    <div class="bm-num">72<span>hrs</span></div>
+    <div class="bm-label">Avg. Time to System Activation</div>
+  </div>
+</div>
+
+<!-- VARIANT ANNOTATION PANEL (Design Reference) -->
+<div class="annotation-box">
+  <div class="annotation-title">// HEADLINE VARIANT ANALYSIS — PSYCHOLOGICAL MECHANICS</div>
+  <div class="variants-grid">
+    <div class="variant-card active-card" id="vc0" onclick="switchVariant(0)">
+      <div class="vc-num">VARIANT 01</div>
+      <div class="vc-headline">"Your Competitors Are Running Closed-Loop Systems. You're Running People."</div>
+      <div class="vc-angle">Asymmetric intelligence framing. Creates instant status anxiety — the visitor is behind without knowing how far. Forces immediate comparison and self-audit.</div>
+      <div class="vc-trigger">Trigger: Competitive inferiority + FOMO cascade</div>
+    </div>
+    <div class="variant-card" id="vc1" onclick="switchVariant(1)">
+      <div class="vc-num">VARIANT 02</div>
+      <div class="vc-headline">"Every Hour Your Business Operates Without This, Revenue Decays."</div>
+      <div class="vc-angle">Loss aversion maximized. Uses present-tense decay framing — the damage isn't future, it's happening right now. Each second of hesitation = cost.</div>
+      <div class="vc-trigger">Trigger: Active-loss anxiety + urgency escalation</div>
+    </div>
+    <div class="variant-card" id="vc2" onclick="switchVariant(2)">
+      <div class="vc-num">VARIANT 03</div>
+      <div class="vc-headline">"You Don't Need More Effort. You Need an Execution Architecture."</div>
+      <div class="vc-angle">Identity reframe. Dismantles the "work harder" narrative and repositions the buyer as an operator-class thinker. Elevates self-concept before pitch even lands.</div>
+      <div class="vc-trigger">Trigger: Identity elevation + paradigm shift</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const headlines = [
+    { label: "Angle: Asymmetric Intelligence", cta: "ACCESS SYSTEM AUDIT", friction: "// AUDIT SESSIONS LIMITED — QUALIFIED OPERATORS ONLY" },
+    { label: "Angle: Active Revenue Loss", cta: "STOP THE DECAY — ENTER SYSTEM", friction: "// REVENUE LOSS IS COMPOUNDING AS YOU READ THIS" },
+    { label: "Angle: Operator Identity Shift", cta: "ENTER ARCHITECTURE LAYER", friction: "// DESIGNED FOR OPERATORS. NOT BEGINNERS." }
+  ];
+
+  function switchVariant(i) {
+    document.querySelectorAll('.headline').forEach((h, idx) => {
+      h.classList.toggle('active', idx === i);
+    });
+    document.querySelectorAll('.subtext').forEach((s, idx) => {
+      s.classList.toggle('active', idx === i);
+    });
+    document.querySelectorAll('.tab-btn').forEach((b, idx) => {
+      b.classList.toggle('active', idx === i);
+    });
+    document.querySelectorAll('.variant-card').forEach((c, idx) => {
+      c.classList.toggle('active-card', idx === i);
+    });
+    document.getElementById('variantLabel').textContent = headlines[i].label;
+    document.getElementById('ctaBtn').textContent = headlines[i].cta;
+    document.getElementById('ctaFriction').textContent = headlines[i].friction;
+  }
+
+  // Live log cycling
+  const logs = [
+    { ts: "09:14:0", suf: 2, cls: "warn", msg: "3 leads untracked — last 6hrs" },
+    { ts: "09:13:4", suf: 7, cls: "err", msg: "Follow-up sequence: timeout" },
+    { ts: "09:13:1", suf: 1, cls: "ok", msg: "Signal acquisition: standby" },
+    { ts: "09:12:5", suf: 5, cls: "warn", msg: "Decision node: human bottleneck" },
+    { ts: "09:12:4", suf: 4, cls: "ok", msg: "Kryonix system: awaiting install" }
+  ];
+
+  let sec = 2;
+  setInterval(() => {
+    sec++;
+    const firstLog = document.querySelector('.log-line .ts');
+    if (firstLog) {
+      firstLog.textContent = `09:14:${String(sec).padStart(2,'0')}`;
+    }
+  }, 1000);
+</script>
+</body>
+</html>
